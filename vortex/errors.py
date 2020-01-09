@@ -7,3 +7,8 @@ class VortexException(Exception):
 
     def to_dict(self):
         return {"message": self.message, "code": self.code, "body": self.body}
+
+
+class UnhandledException(VortexException):
+    def __init__(self):
+        super().__init__("Server had an unexpected error", code=500)

@@ -7,12 +7,13 @@ RM = RoutesManager(
     scopes_required=("scope:read", "scope:metadata") # Examples of keyword arguments available in middlewares
 )
 """
-from functools import wraps, partial as functools_partial
+from functools import partial as functools_partial
 from copy import deepcopy
 
 from aiohttp import web
 
 from vortex.middlewares.builtin import attach_middleware_to_request_kwargs
+from vortex.middlewares.errors import error_handling
 from vortex.typing import type_check
 
 
@@ -41,7 +42,8 @@ class RouteManager(object):
     def __init__(self, base, middlewares=(), **middleware_kwargs):
         self.base = base
         self.middlewares = [
-            attach_middleware_to_request_kwargs(middleware_kwargs)
+            attach_middleware_to_request_kwargs(middleware_kwargs),
+            error_handling,
         ] + list(middlewares)
         self.base_middleware_kwargs = middleware_kwargs
         self.routes = []
